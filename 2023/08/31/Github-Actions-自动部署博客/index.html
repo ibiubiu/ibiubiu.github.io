@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ibiubiu.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1. GitHub新建私有仓库新仓库主要作用是存放hexo站点源代码和GitHub Actions的workflows文件，当提交代码时自动触发博客部署到博客所在仓库分支。 2. 本地Hexo提交代码到仓库E:\blog&gt;git initInitialized empty Git repository in E:&#x2F;blog&#x2F;.git&#x2F; E:\blog&gt;gi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Github Actions 自动部署博客">
+<meta property="og:url" content="https://ibiubiu.github.io/2023/08/31/Github-Actions-%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E5%8D%9A%E5%AE%A2/index.html">
+<meta property="og:site_name" content="marki&#39;s blog">
+<meta property="og:description" content="1. GitHub新建私有仓库新仓库主要作用是存放hexo站点源代码和GitHub Actions的workflows文件，当提交代码时自动触发博客部署到博客所在仓库分支。 2. 本地Hexo提交代码到仓库E:\blog&gt;git initInitialized empty Git repository in E:&#x2F;blog&#x2F;.git&#x2F; E:\blog&gt;gi">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-31T07:40:49.000Z">
+<meta property="article:modified_time" content="2023-09-01T01:25:08.083Z">
+<meta property="article:author" content="ibiubiu">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ibiubiu.github.io/2023/08/31/Github-Actions-%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E5%8D%9A%E5%AE%A2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://ibiubiu.github.io/2023/08/31/Github-Actions-%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E5%8D%9A%E5%AE%A2/","path":"2023/08/31/Github-Actions-自动部署博客/","title":"Github Actions 自动部署博客"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Github Actions 自动部署博客 | marki's blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">marki's blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">ibiubiu</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-GitHub%E6%96%B0%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">1. GitHub新建私有仓库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E6%9C%AC%E5%9C%B0Hexo%E6%8F%90%E4%BA%A4%E4%BB%A3%E7%A0%81%E5%88%B0%E4%BB%93%E5%BA%93"><span class="nav-number">2.</span> <span class="nav-text">2. 本地Hexo提交代码到仓库</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">ibiubiu</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ibiubiu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ibiubiu" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:vovhwow@gmail.com" title="E-Mail → mailto:vovhwow@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://ibiubiu.github.io/2023/08/31/Github-Actions-%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2%E5%8D%9A%E5%AE%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="ibiubiu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="marki's blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Github Actions 自动部署博客 | marki's blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Github Actions 自动部署博客
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-08-31 15:40:49" itemprop="dateCreated datePublished" datetime="2023-08-31T15:40:49+08:00">2023-08-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-01 09:25:08" itemprop="dateModified" datetime="2023-09-01T09:25:08+08:00">2023-09-01</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h5 id="1-GitHub新建私有仓库"><a href="#1-GitHub新建私有仓库" class="headerlink" title="1. GitHub新建私有仓库"></a>1. GitHub新建<font color=red>私有</font>仓库</h5><p>新仓库主要作用是存放hexo站点源代码和GitHub Actions的workflows文件，当提交代码时自动触发博客部署到博客所在仓库分支。</p>
+<h5 id="2-本地Hexo提交代码到仓库"><a href="#2-本地Hexo提交代码到仓库" class="headerlink" title="2. 本地Hexo提交代码到仓库"></a>2. 本地Hexo提交代码到仓库</h5><p>E:\blog&gt;git init<br>Initialized empty Git repository in E:&#x2F;blog&#x2F;.git&#x2F;</p>
+<p>E:\blog&gt;git branch -M master</p>
+<p>E:\blog&gt;git remote add origin <a href="mailto:&#x67;&#x69;&#116;&#x40;&#x67;&#x69;&#116;&#104;&#x75;&#98;&#46;&#99;&#x6f;&#109;">&#x67;&#x69;&#116;&#x40;&#x67;&#x69;&#116;&#104;&#x75;&#98;&#46;&#99;&#x6f;&#109;</a>:ibiubiu&#x2F;blog.git</p>
+<p>E:\blog&gt;git add .<br>warning: in the working copy of ‘package-lock.json’, LF will be replaced by CRLF the next time Git touches it<br>warning: in the working copy of ‘package.json’, LF will be replaced by CRLF the next time Git touches it<br>warning: in the working copy of ‘source&#x2F;_posts&#x2F;Github Pages 部署 Hexo 博客.md’, LF will be replaced by CRLF the next time Git touches it<br>warning: in the working copy of ‘source&#x2F;_posts&#x2F;Github-Actions-自动部署博客.md’, LF will be replaced by CRLF the next time Git touches it<br>warning: adding embedded git repository: themes&#x2F;next<br>hint: You’ve added another git repository inside your current repository.<br>hint: Clones of the outer repository will not contain the contents of<br>hint: the embedded repository and will not know how to obtain it.<br>hint: If you meant to add a submodule, use:<br>hint:<br>hint:   git submodule add <url> themes&#x2F;next<br>hint:<br>hint: If you added this path by mistake, you can remove it from the<br>hint: index with:<br>hint:<br>hint:   git rm –cached themes&#x2F;next<br>hint:<br>hint: See “git help submodule” for more information.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/08/31/Github%20Pages%20%E9%83%A8%E7%BD%B2%20Hexo%20%E5%8D%9A%E5%AE%A2/" rel="prev" title="Hexo + Github Pages 搭建博客">
+                  <i class="fa fa-angle-left"></i> Hexo + Github Pages 搭建博客
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/09/01/aws-rds/" rel="next" title="aws rds">
+                  aws rds <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">ibiubiu.github.io</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
